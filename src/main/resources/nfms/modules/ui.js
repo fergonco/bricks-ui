@@ -98,11 +98,28 @@ define([ "jquery", "message-bus" ], function($, bus) {
       .attr("id", options.div)//
       .appendTo(div);
 
-      if (options.changeListener) {
-         input.on("input", function(e) {
-            options.changeListener(input.val(), e);
-         });
-      }
+      input.on("input", function(e) {
+         if (options.changeEventName) {
+            bus.send(options.changeEventName, input.val());
+         }
+      });
+
+      bus.listen(options.div + "-field-value-fill", function(e, message) {
+         input.val(message);
+      });
+   });
+
+   bus.listen("ui-text-area-field:create", function(e, options) {
+
+      var input = $("<textarea/>")//
+      .attr("id", options.div)//
+      .appendTo("#" + options.parentDiv);
+
+      input.on("input", function(e) {
+         if (options.changeEventName) {
+            bus.send(options.changeEventName, input.val());
+         }
+      });
 
       bus.listen(options.div + "-field-value-fill", function(e, message) {
          input.val(message);
@@ -134,6 +151,28 @@ define([ "jquery", "message-bus" ], function($, bus) {
          input.attr("value", message);
          updateTooltip(input.attr("value"));
       });
+   });
+
+   bus.listen("ui-key-listen", function(e, message) {
+      if (message.div == null) {
+         if (message.keydownEventName) {
+            $(document).on("keydown." + message.keydownEventName, function(e) {
+               bus.send(message.keydownEventName, [ e ]);
+            });
+         }
+      } else {
+         throw "only div==null supported";
+      }
+   });
+
+   bus.listen("ui-key-unlisten", function(e, message) {
+      if (message.div == null) {
+         if (message.keydownEventName) {
+            $(document).unbind("keydown." + message.keydownEventName);
+         }
+      } else {
+         throw "only div==null supported";
+      }
    });
 
 });
