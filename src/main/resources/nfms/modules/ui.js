@@ -12,6 +12,9 @@ define([ "jquery", "message-bus" ], function($, bus) {
    bus.listen("ui-set-content", function(e, options) {
       $("#" + options.div).html(options.html);
    });
+   bus.listen("ui-css", function(e, options) {
+      $("#" + options.div).css(options.property, options.value);
+   });
    bus.listen("ui-element:create", function(e, options) {
       var element;
       if (options.element) {
