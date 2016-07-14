@@ -15,6 +15,23 @@ define([ "jquery", "message-bus" ], function($, bus) {
    bus.listen("ui-css", function(e, options) {
       $("#" + options.div).css(options.property, options.value);
    });
+   bus.listen("ui-dialog:create", function(e, options) {
+      var parent = "body";
+      if (options.parentDiv != null) {
+         parent = "#" + options.parentDiv;
+      }
+
+      var overlay = $("<div/>").appendTo(parent)//
+      .attr("id", options.div + "-overlay")//
+      .attr("class", "ui-dialog-modal-overlay");
+
+      $("<div/>").appendTo(overlay)//
+      .attr("class", "ui-dialog")//
+      .attr("id", options.div);
+   });
+   bus.listen("ui-dialog:close", function(e, message) {
+      $("#" + message+"-overlay").remove();
+   });
    bus.listen("ui-element:create", function(e, options) {
       var element;
       if (options.element) {
@@ -99,6 +116,7 @@ define([ "jquery", "message-bus" ], function($, bus) {
 
       var input = $("<input/>")//
       .attr("id", options.div)//
+      .attr("type", options.type)//
       .appendTo(div);
 
       input.on("input", function(e) {

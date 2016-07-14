@@ -2,12 +2,20 @@ define([ "jquery" ], function($) {
 
    function get(id) {
       var element = $("#" + id);
-      return element.val();
+      if (element.attr("type") == "checkbox") {
+         return element.is(":checked");
+      } else {
+         return element.val();
+      }
    }
-   
+
    function set(id, value) {
       var element = $("#" + id);
-      return element.val(value);
+      if (element.attr("type") == "checkbox") {
+         return element.prop("checked", value);
+      } else {
+         return element.val(value);
+      }
    }
 
    return {
