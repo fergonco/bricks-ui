@@ -15,6 +15,9 @@ define([ "jquery", "message-bus" ], function($, bus) {
    bus.listen("ui-css", function(e, options) {
       $("#" + options.div).css(options.property, options.value);
    });
+   bus.listen("ui-attr", function(e, options) {
+      $("#" + options.div).attr(options.attribute, options.value);
+   });
    bus.listen("ui-dialog:create", function(e, options) {
       var parent = "body";
       if (options.parentDiv != null) {
@@ -30,7 +33,7 @@ define([ "jquery", "message-bus" ], function($, bus) {
       .attr("id", options.div);
    });
    bus.listen("ui-dialog:close", function(e, message) {
-      $("#" + message+"-overlay").remove();
+      $("#" + message + "-overlay").remove();
    });
    bus.listen("ui-element:create", function(e, options) {
       var element;
@@ -95,8 +98,15 @@ define([ "jquery", "message-bus" ], function($, bus) {
          element = $("<span/>").appendTo(parent)//
          .attr("id", options.div);
       }
+
+      if (options.text) {
+         element.html(options.text)//
+      }
+      if (options.image) {
+         element.append($("<img/>").attr("src", options.image));
+      }
+
       element//
-      .html(options.text)//
       .attr("class", "bricksui-span-button")//
       .on("click", function(event) {
          event.stopPropagation();
@@ -112,6 +122,7 @@ define([ "jquery", "message-bus" ], function($, bus) {
 
       $("<label/>")//
       .appendTo(div)//
+      .attr("id", options.div + "-label")//
       .html(options.text);
 
       var input = $("<input/>")//
@@ -154,6 +165,7 @@ define([ "jquery", "message-bus" ], function($, bus) {
 
       $("<label/>")//
       .appendTo(div)//
+      .attr("id", options.div + "-label")//
       .html(options.text);
 
       var input = $("<progress/>")//

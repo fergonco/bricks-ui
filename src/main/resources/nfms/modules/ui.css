@@ -1,8 +1,19 @@
 .bricksui-span-button {
-	background-color: blue;
-	color: white;
-	margin-left: 2px;
-	margin-right: 2px;
+	cursor: pointer;
+	background: gray;
+	padding: 5px;
+	margin: 10px;
+	display: inline-block;
+}
+
+.bricksui-span-button:hover {
+	cursor: pointer;
+	background-color: #82bde5;
+	color: #000;
+}
+
+.bricksui-span-button>img {
+	pointer-events: none;
 }
 
 .ui-dialog-modal-overlay {
