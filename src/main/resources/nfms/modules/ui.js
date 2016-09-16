@@ -85,7 +85,52 @@ define([ "jquery", "message-bus" ], function($, bus) {
          .html(value.text);
       }
    });
+   bus.listen("ui-radio-field:select", function(e, options) {
+      $("#" + options.div + "-" + options.value).attr('checked', true);
+   });
+   bus.listen("ui-radio-field:create", function(e, options) {
+      var element;
+      if (options.element) {
+         element = $(options.element);
+      } else {
+         var parent = "body";
+         if (options.parentDiv != null) {
+            parent = "#" + options.parentDiv;
+         }
+         element = $("<div/>").appendTo(parent);
 
+         if (options.div) {
+            element.attr("id", options.div);
+         }
+      }
+      element//
+      .attr("class", "bricksui-radio");
+
+      function createRadio(radioId, value) {
+         var radioDiv = $("<div>")//
+         .attr("class", "bricksui-radio-item")//
+         .appendTo(element);
+         $("<input/>").appendTo(radioDiv)//
+         .attr("type", "radio")//
+         .attr("id", radioId)//
+         .attr("name", options.div)//
+         .on("change", function(event) {
+            if (options.changeEventName) {
+               bus.send(options.changeEventName, [ value.value ]);
+            }
+         });
+
+         $("<label/>").appendTo(radioDiv)//
+         .attr("for", radioId)//
+         .html(value.text);
+      }
+
+      for (var i = 0; i < options.values.length; i++) {
+         var value = options.values[i];
+         var radioId = options.div + "-" + value.value;
+         createRadio(radioId, value);
+      }
+   });
    bus.listen("ui-button:create", function(e, options) {
       var element;
       if (options.element) {

@@ -1,3 +1,27 @@
+.bricksui-radio-item {
+	display: inline
+}
+
+.bricksui-radio-item input {
+	display: none
+}
+
+.bricksui-radio-item label {
+	user-select: none;
+	background: white none repeat scroll 0 0;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+	cursor: pointer;
+	display: inline-block;
+	margin: 2px;
+	padding: 3px;
+}
+
+.bricksui-radio-item  input:checked+label {
+	background-color: orange;
+}
+
 .bricksui-span-button {
 	cursor: pointer;
 	background: gray;
